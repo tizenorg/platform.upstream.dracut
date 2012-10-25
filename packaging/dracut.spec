@@ -19,6 +19,7 @@ URL: https://dracut.wiki.kernel.org/
 BuildRequires: dash bash git
 BuildRequires: asciidoc
 BuildRequires: xsltproc
+Source0:	%{name}-%{version}.tar.xz
 
 Requires: bash
 Requires: coreutils
