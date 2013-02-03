@@ -3,40 +3,42 @@
 # Variables must be defined
 %define with_nbd 0
 
-Name: dracut
-Version: 024
-Release: 0
+Name:           dracut
+Version:        024
+Release:        0
 
-Summary: Initramfs generator using udev
-Group: System/Base
+Summary:        Initramfs generator using udev
+Group:          System/Base
 
 # The entire source code is GPLv2+
 # except install/* which is LGPLv2.1+
-License: GPLv2+ and LGPLv2.1+
+License:        GPLv2+ and LGPLv2.1+
 
-URL: https://dracut.wiki.kernel.org/
+Url:            https://dracut.wiki.kernel.org/
 
-BuildRequires: dash bash git
-BuildRequires: asciidoc
-BuildRequires: xsltproc
-Source0:	%{name}-%{version}.tar.xz
+Source0:        %{name}-%{version}.tar.xz
+BuildRequires:  asciidoc
+BuildRequires:  bash
+BuildRequires:  dash
+BuildRequires:  git
+BuildRequires:  xsltproc
 
-Requires: bash
-Requires: coreutils
-Requires: cpio
-Requires: filesystem
-Requires: findutils
-Requires: grep
-Requires: hardlink
-Requires: gzip
-Requires: xz
-Requires: kmod-compat
-Requires: sed
-Requires: file
-Requires: kpartx
-Requires: udev > 166
-Requires: kbd 
-Requires: util-linux >= 2.21
+Requires:       bash
+Requires:       coreutils
+Requires:       cpio
+Requires:       file
+Requires:       filesystem
+Requires:       findutils
+Requires:       grep
+Requires:       gzip
+Requires:       hardlink
+Requires:       kbd
+Requires:       kmod-compat
+Requires:       kpartx
+Requires:       sed
+Requires:       udev > 166
+Requires:       util-linux >= 2.21
+Requires:       xz
 Conflicts: systemd < 187
 
 %description
@@ -47,36 +49,36 @@ event-based udev. Having root on MD, DM, LVM2, LUKS is supported as well as
 NFS, iSCSI, NBD, FCoE with the dracut-network package.
 
 %package network
-Summary: Dracut modules to build a dracut initramfs with network support
-Requires: %{name} = %{version}-%{release}
+Summary:        Dracut modules to build a dracut initramfs with network support
+Requires:       %{name} = %{version}
 
 %description network
 This package requires everything which is needed to build a generic
 all purpose initramfs with network support with dracut.
 
 %package caps
-Summary: Dracut modules to build a dracut initramfs which drops capabilities
-Requires: %{name} = %{version}-%{release}
-Requires: libcap
+Summary:        Dracut modules to build a dracut initramfs which drops capabilities
+Requires:       %{name} = %{version}
+Requires:       libcap
 
 %description caps
 This package requires everything which is needed to build an
 all purpose initramfs with dracut, which drops capabilities.
 
 %package tools
-Summary: Dracut tools to build the local initramfs
-Requires: %{name} = %{version}-%{release}
+Summary:        Dracut tools to build the local initramfs
+Requires:       %{name} = %{version}
 
 %description tools
 This package contains tools to assemble the local initrd and host configuration.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 %build
 make all
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT \
+make install DESTDIR=%{buildroot} \
      libdir=%{_prefix}/lib \
      bindir=%{_bindir} \
 %if %{defined _unitdir}
@@ -84,40 +86,40 @@ make install DESTDIR=$RPM_BUILD_ROOT \
 %endif
      sysconfdir=/etc mandir=%{_mandir}
 
-echo "DRACUT_VERSION=%{version}-%{release}" > $RPM_BUILD_ROOT/%{dracutlibdir}/dracut-version.sh
+echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}/%{dracutlibdir}/dracut-version.sh
 
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/01fips
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/02fips-aesni
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/01fips
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/02fips-aesni
 
 # we do not support dash in the initramfs
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/00dash
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/00dash
 
 # remove gentoo specific modules
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/50gensplash
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/50gensplash
 
 %if %{defined _unitdir}
 # with systemd IMA and selinux modules do not make sense
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/96securityfs
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/97masterkey
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/98integrity
-rm -fr $RPM_BUILD_ROOT/%{dracutlibdir}/modules.d/98selinux
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/96securityfs
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/97masterkey
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/98integrity
+rm -fr %{buildroot}/%{dracutlibdir}/modules.d/98selinux
 %endif
 
-mkdir -p $RPM_BUILD_ROOT/boot/dracut
-mkdir -p $RPM_BUILD_ROOT/var/lib/dracut/overlay
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log
-touch $RPM_BUILD_ROOT%{_localstatedir}/log/dracut.log
-mkdir -p $RPM_BUILD_ROOT%{_sharedstatedir}/initramfs
+mkdir -p %{buildroot}/boot/dracut
+mkdir -p %{buildroot}%{_localstatedir}/lib/dracut/overlay
+mkdir -p %{buildroot}%{_localstatedir}/log
+touch %{buildroot}%{_localstatedir}/log/dracut.log
+mkdir -p %{buildroot}%{_sharedstatedir}/initramfs
 
-install -m 0644 dracut.conf.d/suse.conf.example   $RPM_BUILD_ROOT/etc/dracut.conf.d/01-dist.conf
+install -m 0644 dracut.conf.d/suse.conf.example   %{buildroot}%{_sysconfdir}/dracut.conf.d/01-dist.conf
 
 
-mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
-install -m 0644 dracut.logrotate $RPM_BUILD_ROOT/etc/logrotate.d/dracut_log
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_log
 
 # create compat symlink
-mkdir -p $RPM_BUILD_ROOT/sbin
-ln -s /usr/bin/dracut $RPM_BUILD_ROOT/sbin/dracut
+mkdir -p %{buildroot}/sbin
+ln -s /usr/bin/dracut %{buildroot}/sbin/dracut
 
 
 %files
@@ -136,9 +138,9 @@ ln -s /usr/bin/dracut $RPM_BUILD_ROOT/sbin/dracut
 %{dracutlibdir}/dracut-logger.sh
 %{dracutlibdir}/dracut-initramfs-restore
 %{dracutlibdir}/dracut-install
-%config(noreplace) /etc/dracut.conf
-%config /etc/dracut.conf.d/01-dist.conf
-%dir /etc/dracut.conf.d
+%config(noreplace) %{_sysconfdir}/dracut.conf
+%config %{_sysconfdir}/dracut.conf.d/01-dist.conf
+%dir %{_sysconfdir}/dracut.conf.d
 %{_mandir}/man8/dracut.8*
 %{_mandir}/man8/*service.8*
 %{_mandir}/man8/mkinitrd.8*
@@ -192,7 +194,7 @@ ln -s /usr/bin/dracut $RPM_BUILD_ROOT/sbin/dracut
 %{dracutlibdir}/modules.d/99fs-lib
 %{dracutlibdir}/modules.d/99img-lib
 %{dracutlibdir}/modules.d/99shutdown
-%config(noreplace) /etc/logrotate.d/dracut_log
+%config(noreplace) %{_sysconfdir}/logrotate.d/dracut_log
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %dir %{_sharedstatedir}/initramfs
 %if %{defined _unitdir}
@@ -224,6 +226,6 @@ ln -s /usr/bin/dracut $RPM_BUILD_ROOT/sbin/dracut
 %{_mandir}/man8/dracut-catimages.8*
 %{_bindir}/dracut-catimages
 %dir /boot/dracut
-%dir /var/lib/dracut
-%dir /var/lib/dracut/overlay
+%dir %{_localstatedir}/lib/dracut
+%dir %{_localstatedir}/lib/dracut/overlay
 
