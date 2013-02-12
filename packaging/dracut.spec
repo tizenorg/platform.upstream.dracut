@@ -4,7 +4,7 @@
 %define with_nbd 0
 
 Name:           dracut
-Version:        024
+Version:        025
 Release:        0
 
 Summary:        Initramfs generator using udev
