@@ -6,23 +6,18 @@
 Name:           dracut
 Version:        025
 Release:        0
-
 Summary:        Initramfs generator using udev
-Group:          System/Base
-
-# The entire source code is GPLv2+
-# except install/* which is LGPLv2.1+
-License:        GPLv2+ and LGPLv2.1+
-
+Group:          Base/Startup
+# The entire source code is GPL-2.0+
+# except install/* which is LGPL-2.1+
+License:        GPL-2.0+ and LGPL-2.1+
 Url:            https://dracut.wiki.kernel.org/
-
 Source0:        %{name}-%{version}.tar.xz
 BuildRequires:  asciidoc
 BuildRequires:  bash
 BuildRequires:  dash
 BuildRequires:  git
 BuildRequires:  xsltproc
-
 Requires:       bash
 Requires:       coreutils
 Requires:       cpio
@@ -91,8 +86,6 @@ echo "DRACUT_VERSION=%{version}-%{release}" > %{buildroot}/%{dracutlibdir}/dracu
 rm -fr %{buildroot}/%{dracutlibdir}/modules.d/01fips
 rm -fr %{buildroot}/%{dracutlibdir}/modules.d/02fips-aesni
 
-# we do not support dash in the initramfs
-rm -fr %{buildroot}/%{dracutlibdir}/modules.d/00dash
 
 # remove gentoo specific modules
 rm -fr %{buildroot}/%{dracutlibdir}/modules.d/50gensplash
@@ -117,17 +110,12 @@ install -m 0644 dracut.conf.d/suse.conf.example   %{buildroot}%{_sysconfdir}/dra
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_log
 
-# create compat symlink
-mkdir -p %{buildroot}/sbin
-ln -s /usr/bin/dracut %{buildroot}/sbin/dracut
-
 
 %files
 %defattr(-,root,root,0755)
-%doc README HACKING TODO COPYING AUTHORS NEWS dracut.html dracut.png dracut.svg
+%license COPYING
 %{_bindir}/dracut
 # compat symlink
-/sbin/dracut
 %{_bindir}/mkinitrd
 %{_bindir}/lsinitrd
 %dir %{dracutlibdir}
@@ -148,6 +136,7 @@ ln -s /usr/bin/dracut %{buildroot}/sbin/dracut
 %{_mandir}/man7/dracut.kernel.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
+%{dracutlibdir}/modules.d/00dash
 %{dracutlibdir}/modules.d/00bootchart
 %{dracutlibdir}/modules.d/04watchdog
 %{dracutlibdir}/modules.d/05busybox
@@ -155,6 +144,7 @@ ln -s /usr/bin/dracut %{buildroot}/sbin/dracut
 %{dracutlibdir}/modules.d/30convertfs
 %{dracutlibdir}/modules.d/45url-lib
 %{dracutlibdir}/modules.d/50plymouth
+%{dracutlibdir}/modules.d/50drm/module-setup.sh
 %{dracutlibdir}/modules.d/80cms
 %{dracutlibdir}/modules.d/90btrfs
 %{dracutlibdir}/modules.d/90crypt
