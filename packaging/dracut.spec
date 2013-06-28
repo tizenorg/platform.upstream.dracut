@@ -13,6 +13,7 @@ Group:          Base/Startup
 License:        GPL-2.0+ and LGPL-2.1+
 Url:            https://dracut.wiki.kernel.org/
 Source0:        %{name}-%{version}.tar.xz
+Source1001: 	dracut.manifest
 BuildRequires:  asciidoc
 BuildRequires:  bash
 BuildRequires:  dash
@@ -69,6 +70,7 @@ This package contains tools to assemble the local initrd and host configuration.
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 %build
 make all
 
@@ -112,6 +114,7 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root,0755)
 %license COPYING
 %{_bindir}/dracut
@@ -193,6 +196,7 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 %endif
 
 %files network
+%manifest %{name}.manifest
 %defattr(-,root,root,0755)
 %{dracutlibdir}/modules.d/40network
 %{dracutlibdir}/modules.d/95fcoe
@@ -208,10 +212,12 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 
 
 %files caps
+%manifest %{name}.manifest
 %defattr(-,root,root,0755)
 %{dracutlibdir}/modules.d/02caps
 
 %files tools
+%manifest %{name}.manifest
 %defattr(-,root,root,0755)
 %{_mandir}/man8/dracut-catimages.8*
 %{_bindir}/dracut-catimages
