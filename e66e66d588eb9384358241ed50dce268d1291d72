@@ -1,0 +1,8 @@
+Change-Id: Ie66e66d588eb9384358241ed50dce268d1291d72
+Code-Review+2: Ryan Ware <ware@linux.intel.com>
+Verified+1: Ryan Ware <ware@linux.intel.com>
+Submitted-by: Ryan Ware <ware@linux.intel.com>
+Submitted-at: Mon, 08 Jul 2013 10:05:56 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4634
+Project: platform/upstream/dracut
+Branch: refs/heads/tizen
