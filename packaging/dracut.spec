@@ -4,7 +4,7 @@
 %define with_nbd 0
 
 Name:           dracut
-Version:        025
+Version:        029
 Release:        0
 Summary:        Initramfs generator using udev
 Group:          Base/Startup
@@ -137,10 +137,13 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 %{_mandir}/man8/mkinitrd.8*
 %{_mandir}/man1/lsinitrd.1*
 %{_mandir}/man7/dracut.kernel.7*
+%{_mandir}/man7/dracut.bootup.7*
 %{_mandir}/man7/dracut.cmdline.7*
 %{_mandir}/man5/dracut.conf.5*
 %{dracutlibdir}/modules.d/00dash
 %{dracutlibdir}/modules.d/00bootchart
+%{dracutlibdir}/modules.d/00systemd-bootchart/module-setup.sh
+%{dracutlibdir}/modules.d/03rescue/module-setup.sh
 %{dracutlibdir}/modules.d/04watchdog
 %{dracutlibdir}/modules.d/05busybox
 %{dracutlibdir}/modules.d/10i18n
@@ -193,7 +196,25 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 %if %{defined _unitdir}
 %{_unitdir}/dracut-shutdown.service
 %{_unitdir}/shutdown.target.wants/dracut-shutdown.service
+%{_unitdir}/dracut-cmdline.service
+%{_unitdir}/dracut-initqueue.service
+%{_unitdir}/dracut-mount.service
+%{_unitdir}/dracut-pre-mount.service
+%{_unitdir}/dracut-pre-pivot.service
+%{_unitdir}/dracut-pre-trigger.service
+%{_unitdir}/dracut-pre-udev.service
+%{_unitdir}/initrd.target.wants/dracut-cmdline.service
+%{_unitdir}/initrd.target.wants/dracut-initqueue.service
+%{_unitdir}/initrd.target.wants/dracut-mount.service
+%{_unitdir}/initrd.target.wants/dracut-pre-mount.service
+%{_unitdir}/initrd.target.wants/dracut-pre-pivot.service
+%{_unitdir}/initrd.target.wants/dracut-pre-trigger.service
+%{_unitdir}/initrd.target.wants/dracut-pre-udev.service
 %endif
+/usr/lib/kernel/install.d/50-dracut.install
+/usr/lib/kernel/install.d/51-dracut-rescue.install
+%{_datarootdir}/bash-completion/completions/dracut
+%{_datarootdir}/bash-completion/completions/lsinitrd
 
 %files network
 %manifest %{name}.manifest
