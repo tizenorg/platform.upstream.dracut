@@ -4,7 +4,7 @@
 %define with_nbd 0
 
 Name:           dracut
-Version:        029
+Version:        032
 Release:        0
 Summary:        Initramfs generator using udev
 Group:          Base/Startup
@@ -190,6 +190,10 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 %{dracutlibdir}/modules.d/99fs-lib
 %{dracutlibdir}/modules.d/99img-lib
 %{dracutlibdir}/modules.d/99shutdown
+%{dracutlibdir}/modules.d/00bash/module-setup.sh
+%{dracutlibdir}/modules.d/03modsign/load-modsign-keys.sh
+%{dracutlibdir}/modules.d/03modsign/module-setup.sh
+%{dracutlibdir}/modules.d/90bcache/module-setup.sh
 %config(noreplace) %{_sysconfdir}/logrotate.d/dracut_log
 %attr(0644,root,root) %ghost %config(missingok,noreplace) %{_localstatedir}/log/dracut.log
 %dir %{_sharedstatedir}/initramfs
@@ -230,7 +234,6 @@ install -m 0644 dracut.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/dracut_l
 %{dracutlibdir}/modules.d/95ssh-client
 %{dracutlibdir}/modules.d/45ifcfg
 %{dracutlibdir}/modules.d/95znet
-
 
 %files caps
 %manifest %{name}.manifest
