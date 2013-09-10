@@ -1,0 +1,10 @@
+Code-Review+1: Patrick McCarty <patrick.mccarty@linux.intel.com>
+Code-Review+2: william douglas <william.douglas@intel.com>
+Verified+1: william douglas <william.douglas@intel.com>
+Code-Review+1: Maciej Wereski <m.wereski@partner.samsung.com>
+Verified+1: Maciej Wereski <m.wereski@partner.samsung.com>
+Submitted-by: william douglas <william.douglas@intel.com>
+Submitted-at: Tue, 10 Sep 2013 09:13:32 -0700
+Reviewed-on: https://review.tizen.org/gerrit/9865
+Project: platform/upstream/dracut
+Branch: refs/heads/tizen
