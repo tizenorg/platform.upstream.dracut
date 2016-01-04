@@ -112,7 +112,7 @@ ifneq ($(enable_documentation),no)
 endif
 	if [ -n "$(systemdsystemunitdir)" ]; then \
 		mkdir -p $(DESTDIR)$(systemdsystemunitdir); \
-		ln -srf $(DESTDIR)$(pkglibdir)/modules.d/98systemd/dracut-shutdown.service $(DESTDIR)$(systemdsystemunitdir)/dracut-shutdown.service; \
+		cd $(DESTDIR) ; ln -sf ./$(pkglibdir)/modules.d/98systemd/dracut-shutdown.service ./$(systemdsystemunitdir)/dracut-shutdown.service; \
 		mkdir -p $(DESTDIR)$(systemdsystemunitdir)/shutdown.target.wants; \
 		ln -s ../dracut-shutdown.service \
 		$(DESTDIR)$(systemdsystemunitdir)/shutdown.target.wants/dracut-shutdown.service; \
@@ -126,7 +126,8 @@ endif
 		    dracut-pre-trigger.service \
 		    dracut-pre-udev.service \
 		    ; do \
-			ln -srf $(DESTDIR)$(pkglibdir)/modules.d/98systemd/$$i $(DESTDIR)$(systemdsystemunitdir); \
+			//cd $(DESTDIR) ; ln -sf ./$(pkglibdir)/modules.d/98systemd/dracut-shutdown.service ./$(systemdsystemunitdir)/dracut-shutdown.service; \
+			cd $(DESTDIR) ; ln -sf ./$(pkglibdir)/modules.d/98systemd/$$i ./$(systemdsystemunitdir); \
 			ln -s ../$$i \
 			$(DESTDIR)$(systemdsystemunitdir)/initrd.target.wants/$$i; \
 		done \
